@@ -96,6 +96,7 @@ class SmileIDSmartSelfieCaptureView(context: ReactApplicationContext) : SmileIDS
           jobId = jobId,
           allowNewEnroll = false,
           skipApiSubmission = true,
+          allowAgentMode = false,
           metadata = mutableListOf(),
           smileSensitivity = smileSensitivity
         )

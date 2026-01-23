@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://docs.usesmileid.com/.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm,swift}"
-  s.dependency "SmileID", "11.1.5"
+  s.dependency "SmileID", "11.1.7"
   # for development alongside example/ios/Podfile uncomment the version and specify
   # tag or branch in example/ios/Podfile
   # s.dependency "SmileID"
