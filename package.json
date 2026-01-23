@@ -1,6 +1,6 @@
 {
   "name": "@smile_identity/react-native",
-  "version": "11.1.4",
+  "version": "11.1.7",
   "description": "Official wrapper for the Smile ID >v10 android and iOS SDKs",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
