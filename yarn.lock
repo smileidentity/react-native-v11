@@ -12730,15 +12730,15 @@ __metadata:
   linkType: hard
 
 "tar@npm:^7.4.3":
-  version: 7.5.6
-  resolution: "tar@npm:7.5.6"
+  version: 7.5.7
+  resolution: "tar@npm:7.5.7"
   dependencies:
     "@isaacs/fs-minipass": ^4.0.0
     chownr: ^3.0.0
     minipass: ^7.1.2
     minizlib: ^3.1.0
     yallist: ^5.0.0
-  checksum: 3d0c4940b78908cf7a796fcc7c05a804f5019e74526cbce7a094d381983393a994ae7521830f36156c369bc8a1e2da0dba8f41e9eb8eb090fce1c2a2025bc505
+  checksum: 82fa04804b6cae4c0b46b84e97a08c39e1c17bb959350baa32d139bcf5e1fc7ebc3ceb72465dd3e2e311992386ecc13599a257d5672158490ceb9464146d5573
   languageName: node
   linkType: hard
 
@@ -13457,14 +13457,14 @@ __metadata:
   linkType: hard
 
 "vm2@npm:^3.9.19":
-  version: 3.10.2
-  resolution: "vm2@npm:3.10.2"
+  version: 3.10.3
+  resolution: "vm2@npm:3.10.3"
   dependencies:
     acorn: ^8.14.1
     acorn-walk: ^8.3.4
   bin:
     vm2: bin/vm2
-  checksum: 4cac359fe9bc51756a981e3a72a39a7ff01bec149f0505186c8ff69825b4afd658f8dc904291944754989978f16edc5648da13c5f33a720d82625381e00c5aea
+  checksum: 69540bc1509c33d278ebd6bc73230af8694ef26bfa040e5f3ba27d06162c5727f9399ccdba7319802008a902110692a8253da60ba9350ba57239ec4afe519624
   languageName: node
   linkType: hard
 
