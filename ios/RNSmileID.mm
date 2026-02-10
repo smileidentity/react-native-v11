@@ -30,4 +30,5 @@ RCT_EXTERN_METHOD(pollSmartSelfieJobStatus:(NSDictionary *)request withResolver:
 RCT_EXTERN_METHOD(pollDocumentVerificationJobStatus:(NSDictionary *)request withResolver:(RCTPromiseResolveBlock)resolve withRejecter:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(pollBiometricKycJobStatus:(NSDictionary *)request withResolver:(RCTPromiseResolveBlock)resolve withRejecter:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(pollEnhancedDocumentVerificationJobStatus:(NSDictionary *)request withResolver:(RCTPromiseResolveBlock)resolve withRejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(applyLocalization:(RCTPromiseResolveBlock)resolve withRejecter:(RCTPromiseRejectBlock)reject)
 @end

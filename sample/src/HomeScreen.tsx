@@ -156,6 +156,11 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
       console.log('Error setting offline mode', e);
     });
 
+    // Call if you want to apply localization
+    // SmileID.applyLocalization().catch((e) => {
+    //   console.log('Error applying localisation', e);
+    // });
+
     //call back url if needed
     // SmileID.setCallbackUrl(
     //   'https://your.site/url'

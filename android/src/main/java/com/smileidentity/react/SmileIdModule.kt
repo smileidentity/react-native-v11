@@ -119,6 +119,16 @@ class SmileIdModule internal constructor(
   }
 
   @ReactMethod
+  override fun applyLocalisation(
+    promise: Promise,
+  ) {
+    // On Android, localization is handled automatically via string resources.
+    // Users provide translations in values-<lang>/strings.xml and Android
+    // resolves them based on the device locale. No additional setup needed.
+    promise.resolve(null)
+  }
+
+  @ReactMethod
   override fun submitJob(
     jobId: String,
     promise: Promise,

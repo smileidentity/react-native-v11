@@ -9,17 +9,31 @@ import SmileIDEnhancedDocumentVerificationView from './SmileIDEnhancedDocumentVe
 import SmileIDSmartSelfieCaptureView from './SmileIDSmartSelfieCaptureView';
 import SmileIDDocumentCaptureView from './SmileIDDocumentCaptureView';
 import SmileIDConsentView from './SmileIDConsentView';
+import type {
+  BiometricKYCRequest,
+  ConsentRequest,
+  DocumentVerificationRequest,
+  EnhancedDocumentVerificationRequest,
+  SmartSelfieAuthenticationEnhancedRequest,
+  SmartSelfieAuthenticationRequest,
+  SmartSelfieEnrollmentEnhancedRequest,
+  SmartSelfieEnrollmentRequest,
+  SmileIDViewProps,
+} from './types';
 import {
   AuthenticationRequest,
   AuthenticationResponse,
   BiometricKycJobStatusResponse,
+  Config,
   ConsentInformation,
   DocumentVerificationJobStatusResponse,
   EnhancedDocumentVerificationJobStatusResponse,
-  EnhancedKycRequest,
   EnhancedKycAsyncResponse,
+  EnhancedKycRequest,
   EnhancedKycResponse,
+  IdInfo,
   JobStatusRequest,
+  JobType,
   PrepUploadRequest,
   PrepUploadResponse,
   ProductsConfigRequest,
@@ -28,20 +42,6 @@ import {
   SmartSelfieJobStatusResponse,
   UploadRequest,
   ValidDocumentsResponse,
-  JobType,
-  IdInfo,
-  Config,
-} from './types';
-import type {
-  DocumentVerificationRequest,
-  SmartSelfieEnrollmentRequest,
-  SmartSelfieAuthenticationRequest,
-  BiometricKYCRequest,
-  SmileIDViewProps,
-  ConsentRequest,
-  SmartSelfieEnrollmentEnhancedRequest,
-  SmartSelfieAuthenticationEnhancedRequest,
-  EnhancedDocumentVerificationRequest,
 } from './types';
 import type { Spec } from './NativeSmileId';
 
@@ -116,6 +116,15 @@ const SmileID = {
    */
   disableCrashReporting: () =>
     Platform.OS === 'android' ? _SmileID.disableCrashReporting() : () => {},
+
+  /**
+   * Apply localization strings from the host app's bundle.
+   * On iOS, this makes the SDK use the app's Localizable.strings (e.g. sw.lproj/Localizable.strings)
+   * instead of the default English strings bundled with the SDK.
+   * On Android, this is a no-op since Android handles localization automatically via string resources.
+   * Call this after initialize() if your app provides translated strings.
+   */
+  applyLocalization: () => _SmileID.applyLocalization(),
 
   authenticate: (request: AuthenticationRequest) =>
     _SmileID.authenticate(request),

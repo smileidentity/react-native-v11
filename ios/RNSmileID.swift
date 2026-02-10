@@ -39,13 +39,6 @@ class RNSmileID: NSObject {
             SmileID.initialize(useSandbox: useSandBox)
         }
 
-       // Automatically apply localization using the main bundle's Localizable.strings
-        SmileID.apply(
-          SmileIDLocalizableStrings(
-            bundle: Bundle.main,
-            tablename: "Localizable"
-          )
-        )
         resolve(nil)
     }
 
@@ -537,4 +530,18 @@ class RNSmileID: NSObject {
         }
         resolve(String(data: jsonData, encoding: .utf8) ?? "")
     }
+
+  @objc(applyLocalization:withRejecter:)
+  func applyLocalization(
+      resolve: @escaping RCTPromiseResolveBlock,
+      reject _: @escaping RCTPromiseRejectBlock
+  ) {
+      SmileID.apply(
+          SmileIDLocalizableStrings(
+              bundle: Bundle.main,
+              tablename: "Localizable"
+          )
+      )
+      resolve(nil)
+  }
 }
