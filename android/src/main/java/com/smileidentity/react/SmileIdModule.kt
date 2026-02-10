@@ -119,7 +119,7 @@ class SmileIdModule internal constructor(
   }
 
   @ReactMethod
-  override fun applyLocalisation(
+  override fun applyLocalization(
     promise: Promise,
   ) {
     // On Android, localization is handled automatically via string resources.

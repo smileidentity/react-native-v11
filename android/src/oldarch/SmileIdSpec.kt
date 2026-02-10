@@ -62,5 +62,5 @@ abstract class SmileIdSpec internal constructor(context: ReactApplicationContext
 
   abstract fun pollEnhancedDocumentVerificationJobStatus(request: ReadableMap, promise: Promise)
 
-  abstract fun applyLocalisation(promise: Promise)
+  abstract fun applyLocalization(promise: Promise)
 }
