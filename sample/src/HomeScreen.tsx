@@ -158,7 +158,7 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
 
     // Call if you want to apply localization
     // SmileID.applyLocalization().catch((e) => {
-    //   console.log('Error applying localisation', e);
+    //   console.log('Error applying localization', e);
     // });
 
     //call back url if needed
