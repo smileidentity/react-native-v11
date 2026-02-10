@@ -75,6 +75,14 @@ export interface Spec extends TurboModule {
    */
   disableCrashReporting: () => Promise<void>;
 
+  /**
+   * Apply localization strings from the host app's bundle.
+   * On iOS, this calls SmileID.apply(SmileIDLocalizableStrings(bundle: Bundle.main, tablename: "Localizable"))
+   * so the SDK uses the app's Localizable.strings instead of the default English strings.
+   * On Android, this is a no-op since Android handles localization automatically via string resources.
+   */
+  applyLocalization(): Promise<void>;
+
   authenticate(request: AuthenticationRequest): Promise<AuthenticationResponse>;
 
   prepUpload(request: PrepUploadRequest): Promise<PrepUploadResponse>;
@@ -128,14 +136,6 @@ export interface Spec extends TurboModule {
   pollEnhancedDocumentVerificationJobStatus(
     request: JobStatusRequest
   ): Promise<EnhancedDocumentVerificationJobStatusResponse>;
-
-  /**
-   * Apply localization strings from the host app's bundle.
-   * On iOS, this calls SmileID.apply(SmileIDLocalizableStrings(bundle: Bundle.main, tablename: "Localizable"))
-   * so the SDK uses the app's Localizable.strings instead of the default English strings.
-   * On Android, this is a no-op since Android handles localization automatically via string resources.
-   */
-  applyLocalization(): Promise<void>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('RNSmileID');
