@@ -171,7 +171,10 @@ export type EnhancedDocumentVerificationRequest =
     consentInformation?: ConsentInformation;
   };
 
-export type ConsentRequest = Omit<SmartSelfieRequest, 'allowAgentMode' | 'forceAgentMode'> & {
+export type ConsentRequest = Omit<
+  SmartSelfieRequest,
+  'allowAgentMode' | 'forceAgentMode'
+> & {
   /**
    * String value of the resource in the app's drawable folder to use as the partner icon.
    */
