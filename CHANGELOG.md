@@ -1,6 +1,6 @@
 # Release Notes
 
-## 11.1.8  - March 16, 2026
+## 11.1.8  - March 17, 2026
 
 ### Changed
 * Bump Android SDK to [v11.1.9](https://github.com/smileidentity/android/releases/tag/v11.1.9)
