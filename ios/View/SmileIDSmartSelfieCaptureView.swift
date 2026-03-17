@@ -20,15 +20,13 @@ struct SmileIDSmartSelfieCaptureView: View {
 
     private func createViewModelIfNeeded() {
         guard viewModel == nil else { return }
-        let allowAgentMode = product.allowAgentMode
-        let forceAgentMode = product.forceAgentMode
         viewModel = SelfieViewModel(
             isEnroll: false,
             userId: product.userId ?? generateUserId(),
             jobId: product.jobId ?? generateJobId(),
             allowNewEnroll: false,
-            allowAgentMode: allowAgentMode,
-            forceAgentMode: forceAgentMode,
+            allowAgentMode: product.allowAgentMode,
+            forceAgentMode: product.forceAgentMode,
             skipApiSubmission: true,
             extraPartnerParams: [:]
         )

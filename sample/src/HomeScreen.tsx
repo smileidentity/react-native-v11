@@ -38,7 +38,7 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
   const defaultProductRef = useRef({
     userId: '',
     jobId: '',
-    allowAgentMode: true,
+    allowAgentMode: false,
     forceAgentMode: false,
     showInstructions: true,
     showAttribution: true,
