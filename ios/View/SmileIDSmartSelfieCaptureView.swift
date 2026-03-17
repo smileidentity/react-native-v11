@@ -3,8 +3,8 @@ import SmileID
 import SwiftUI
 
 struct SmileIDSmartSelfieCaptureView: View {
-    @ObservedObject var viewModel: SelfieViewModel
     @ObservedObject var product: SmileIDProductModel
+    @State private var viewModel: SelfieViewModel?
     @State private var acknowledgedInstructions = false
     var smileIDUIViewDelegate: SmileIDUIViewDelegate
 
@@ -13,6 +13,25 @@ struct SmileIDSmartSelfieCaptureView: View {
             selfieCaptureScreen
         }.navigationViewStyle(StackNavigationViewStyle())
             .padding()
+            .onReceive(product.$allowAgentMode.combineLatest(product.$forceAgentMode)) { _ in
+                createViewModelIfNeeded()
+            }
+    }
+
+    private func createViewModelIfNeeded() {
+        guard viewModel == nil else { return }
+        let allowAgentMode = product.allowAgentMode
+        let forceAgentMode = product.forceAgentMode
+        viewModel = SelfieViewModel(
+            isEnroll: false,
+            userId: product.userId ?? generateUserId(),
+            jobId: product.jobId ?? generateJobId(),
+            allowNewEnroll: false,
+            allowAgentMode: allowAgentMode,
+            forceAgentMode: forceAgentMode,
+            skipApiSubmission: true,
+            extraPartnerParams: [:]
+        )
     }
 
     private var selfieCaptureScreen: some View {
@@ -26,49 +45,50 @@ struct SmileIDSmartSelfieCaptureView: View {
                     extraPartnerParams: product.extraPartnerParams,
                     delegate: self
                 )
-            } else {
-                legacySelfieCaptureScreen
+            } else if let viewModel = viewModel {
+                legacySelfieCaptureScreen(viewModel: viewModel)
             }
         }
     }
 
-  private var legacySelfieCaptureScreen: some View {
-    ZStack {
-      if product.showInstructions, !acknowledgedInstructions {
-        SmartSelfieInstructionsScreen(
-          showAttribution: product.showAttribution) {
-            acknowledgedInstructions = true
-          }
-      } else if viewModel.processingState != nil {
-        Color.clear.onAppear {
-          self.viewModel.onFinished(callback: self)
+    private func legacySelfieCaptureScreen(viewModel: SelfieViewModel) -> some View {
+        ZStack {
+            if product.showInstructions, !acknowledgedInstructions {
+                SmartSelfieInstructionsScreen(
+                    showAttribution: product.showAttribution) {
+                        acknowledgedInstructions = true
+                    }
+            } else if viewModel.processingState != nil {
+                Color.clear.onAppear {
+                    viewModel.onFinished(callback: self)
+                }
+            } else if let selfieToConfirm = viewModel.selfieToConfirm {
+                if product.showConfirmation {
+                    ImageCaptureConfirmationDialog(
+                        title: SmileIDResourcesHelper.localizedString(for: "Confirmation.GoodSelfie"),
+                        subtitle: SmileIDResourcesHelper.localizedString(for: "Confirmation.FaceClear"),
+                        image: UIImage(data: selfieToConfirm)!,
+                        confirmationButtonText: SmileIDResourcesHelper.localizedString(for: "Confirmation.YesUse"),
+                        onConfirm: viewModel.submitJob,
+                        retakeButtonText: SmileIDResourcesHelper.localizedString(for: "Confirmation.Retake"),
+                        onRetake: viewModel.onSelfieRejected,
+                        scaleFactor: 1.25
+                    ).preferredColorScheme(.light)
+                } else {
+                    Color.clear.onAppear {
+                        viewModel.submitJob()
+                    }
+                }
+            } else {
+                SelfieCaptureScreen(
+                    viewModel: viewModel,
+                    allowAgentMode: product.allowAgentMode,
+                    forceAgentMode: product.forceAgentMode,
+                    smileSensitivity: product.smileSensitivity
+                ).preferredColorScheme(.light)
+            }
         }
-      } else if let selfieToConfirm = viewModel.selfieToConfirm {
-        if self.product.showConfirmation {
-          ImageCaptureConfirmationDialog(
-            title: SmileIDResourcesHelper.localizedString(for: "Confirmation.GoodSelfie"),
-            subtitle: SmileIDResourcesHelper.localizedString(for: "Confirmation.FaceClear"),
-            image: UIImage(data: selfieToConfirm)!,
-            confirmationButtonText: SmileIDResourcesHelper.localizedString(for: "Confirmation.YesUse"),
-            onConfirm: viewModel.submitJob,
-            retakeButtonText: SmileIDResourcesHelper.localizedString(for: "Confirmation.Retake"),
-            onRetake: viewModel.onSelfieRejected,
-            scaleFactor: 1.25
-          ).preferredColorScheme(.light)
-        } else {
-          Color.clear.onAppear {
-            self.viewModel.submitJob()
-          }
-        }
-      } else {
-        SelfieCaptureScreen(
-          viewModel: viewModel,
-          allowAgentMode: self.product.allowAgentMode,
-          smileSensitivity: self.product.smileSensitivity
-        ).preferredColorScheme(.light)
-      }
     }
-  }
 }
 
 extension SmileIDSmartSelfieCaptureView: SmartSelfieResultDelegate {

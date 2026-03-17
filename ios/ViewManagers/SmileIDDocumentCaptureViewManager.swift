@@ -22,7 +22,6 @@ class SmileIDDocumentCaptureViewManager: SmileIDBaseViewManager {
                 self.product.extraPartnerParams = params["extraPartnerParams"] as? [String: String] ?? [:]
                 self.product.userId = params["userId"] as? String
                 self.product.jobId = params["jobId"] as? String
-                self.product.allowAgentMode = params["allowAgentMode"] as? Bool ?? false
                 self.product.front = params["isDocumentFrontSide"] as? Bool ?? true
                 self.product.showAttribution = params["showAttribution"] as? Bool ?? true
                 self.product.showInstructions = params["showInstructions"] as? Bool ?? true

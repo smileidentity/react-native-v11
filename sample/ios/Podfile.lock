@@ -962,7 +962,7 @@ PODS:
     - React-utils
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - SmileID (= 11.1.7)
+    - SmileID (= 11.1.9)
     - Yoga
   - React-nativeconfig (0.74.2)
   - React-NativeModulesApple (0.74.2):
@@ -1218,9 +1218,9 @@ PODS:
   - Sentry (8.57.1):
     - Sentry/Core (= 8.57.1)
   - Sentry/Core (8.57.1)
-  - SmileID (11.1.7):
-    - SmileIDSDK (= 11.1.7)
-  - SmileIDSDK (11.1.7):
+  - SmileID (11.1.9):
+    - SmileIDSDK (= 11.1.9)
+  - SmileIDSDK (11.1.9):
     - FingerprintJS (= 1.6.0)
     - Sentry (= 8.57.1)
     - ZIPFoundation (= 0.9.20)
@@ -1448,7 +1448,7 @@ SPEC CHECKSUMS:
   React-logger: 70e002e04cc56ff5c12157537405d1644c050703
   React-Mapbuffer: 8d1f0fc6e7280a8ed6da70ece5f283ac5c8032cb
   react-native-safe-area-context: 758e894ca5a9bd1868d2a9cfbca7326a2b6bf9dc
-  react-native-smile-id: dc746644ec3922ee96c6fc80de24cc98fbc80a9f
+  react-native-smile-id: 513e31c7e28708afd5afa1f7eeb6f6576095b29f
   React-nativeconfig: 9f223cd321823afdecf59ed00861ab2d69ee0fc1
   React-NativeModulesApple: 1cd770ed7dc463e55d02a05f7fc3be46076d393e
   React-perflogger: 32ed45d9cee02cf6639acae34251590dccd30994
@@ -1474,8 +1474,8 @@ SPEC CHECKSUMS:
   ReactCommon: 4968ff446d467c4def1945125e59f82e3e986af3
   RNScreens: 02747ebee17d2e322af4ee383877367cf82a3cd6
   Sentry: ea4ca7cd1a46c77dcc8123804ce36d8f5603a841
-  SmileID: e27a45aef3108362867110a9fd38181881fd424a
-  SmileIDSDK: f158a8575f22439a4dfbf6eb50211c4a896de237
+  SmileID: 2ef7d2281b61b47f2a0ffc7c5766151e26421973
+  SmileIDSDK: 2ae7eaf6bbc356b51ff7ed9163449cc7a5683941
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: ae3c32c514802d30f687a04a6a35b348506d411f
   ZIPFoundation: dfd3d681c4053ff7e2f7350bc4e53b5dba3f5351
