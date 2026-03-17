@@ -27,7 +27,6 @@ class SmileIDDocumentCaptureViewManager(
     args?.let {
       view.userId = it.getStringOrDefault("userId")
       view.jobId = it.getStringOrDefault("jobId")
-      view.allowAgentMode = it.getBoolOrDefault("allowAgentMode", true)
       view.showAttribution = it.getBoolOrDefault("showAttribution", true)
       view.showInstructions = it.getBoolOrDefault("showInstructions", true)
       view.showConfirmation = it.getBoolOrDefault("showConfirmation", true)

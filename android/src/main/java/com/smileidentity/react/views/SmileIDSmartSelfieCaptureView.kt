@@ -97,6 +97,7 @@ class SmileIDSmartSelfieCaptureView(context: ReactApplicationContext) : SmileIDS
           allowNewEnroll = false,
           skipApiSubmission = true,
           allowAgentMode = false,
+          forceAgentMode = false,
           metadata = mutableListOf(),
           smileSensitivity = smileSensitivity
         )
@@ -120,7 +121,13 @@ class SmileIDSmartSelfieCaptureView(context: ReactApplicationContext) : SmileIDS
         viewModel,
       )
 
-      else -> RenderSelfieCaptureScreen(userId, jobId, allowAgentMode ?: true, viewModel)
+      else -> RenderSelfieCaptureScreen(
+        userId = userId,
+        jobId = jobId,
+        allowAgentMode = allowAgentMode ?: false,
+        forceAgentMode = forceAgentMode ?: false,
+        viewModel = viewModel,
+      )
     }
   }
 
@@ -129,6 +136,7 @@ class SmileIDSmartSelfieCaptureView(context: ReactApplicationContext) : SmileIDS
     userId: String,
     jobId: String,
     allowAgentMode: Boolean,
+    forceAgentMode: Boolean,
     viewModel: SelfieViewModel,
   ) {
     Box(
@@ -142,6 +150,7 @@ class SmileIDSmartSelfieCaptureView(context: ReactApplicationContext) : SmileIDS
         userId = userId,
         jobId = jobId,
         allowAgentMode = allowAgentMode,
+        forceAgentMode = forceAgentMode,
         allowNewEnroll = false,
         skipApiSubmission = true,
         viewModel = viewModel,
