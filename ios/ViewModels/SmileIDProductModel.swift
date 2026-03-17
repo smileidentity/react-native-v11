@@ -36,4 +36,5 @@ class SmileIDProductModel: ObservableObject {
   @Published var bypassSelfieCaptureWithFilePath: URL?
   @Published var onResult: RCTBubblingEventBlock?
   @Published var smileSensitivity: SmileSensitivity = .normal
+  @Published var paramsReady: Bool = false
 }

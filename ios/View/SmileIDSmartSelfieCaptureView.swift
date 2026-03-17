@@ -13,8 +13,10 @@ struct SmileIDSmartSelfieCaptureView: View {
             selfieCaptureScreen
         }.navigationViewStyle(StackNavigationViewStyle())
             .padding()
-            .onReceive(product.$allowAgentMode.combineLatest(product.$forceAgentMode)) { _ in
-                createViewModelIfNeeded()
+            .onReceive(product.$paramsReady) { ready in
+                if ready {
+                    createViewModelIfNeeded()
+                }
             }
     }
 
