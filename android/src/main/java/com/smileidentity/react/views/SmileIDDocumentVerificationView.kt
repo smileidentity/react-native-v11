@@ -53,6 +53,7 @@ class SmileIDDocumentVerificationView(context: ReactApplicationContext) : SmileI
             idAspectRatio = idAspectRatio,
             showAttribution = showAttribution,
             allowAgentMode = allowAgentMode ?: false,
+            forceAgentMode = forceAgentMode ?: false,
             showInstructions = showInstructions,
             allowGalleryUpload = allowGalleryUpload,
             captureBothSides = captureBothSides,
@@ -61,6 +62,7 @@ class SmileIDDocumentVerificationView(context: ReactApplicationContext) : SmileI
             smileSensitivity = smileSensitivity ?: SmileSensitivity.NORMAL,
             extraPartnerParams = extraPartnerParams,
             useStrictMode = useStrictMode ?: false,
+            skipApiSubmission = skipApiSubmission
           ) { res ->
             when (res) {
               is SmileIDResult.Success -> {

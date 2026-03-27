@@ -11,6 +11,7 @@ struct SmileIDSmartSelfieEnrollmentView: View {
                 userId: product.userId ?? generateUserId(),
                 allowNewEnroll: product.allowNewEnroll,
                 allowAgentMode: product.allowAgentMode,
+                forceAgentMode: product.forceAgentMode,
                 showAttribution: product.showAttribution,
                 showInstructions: product.showInstructions,
                 smileSensitivity: product.smileSensitivity,
