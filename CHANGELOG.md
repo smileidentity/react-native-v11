@@ -6,6 +6,9 @@
 * Added `applyLocalization()` function to enable partner-provided string translations on iOS via
 `SmileIDLocalizableStrings` to be applied in the SDK.
 
+### Fixed
+* Fixed the invalidator bug when `allowNewEnroll` is set to true
+
 ## 11.1.7 - January 23, 2026
 
 ### Changed
