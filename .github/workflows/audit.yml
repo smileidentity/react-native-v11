@@ -17,7 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      issues: write
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
@@ -31,25 +30,12 @@ jobs:
           yarn install --immutable
       - name: Run yarn audit
         run: yarn npm audit --all --recursive
-      - name: Create issue on failure
-        if: failure() && github.event_name != 'pull_request'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          EXISTING=$(gh issue list --label "security-audit" --state open --json number --jq 'length')
-          if [ "$EXISTING" -gt 0 ]; then exit 0; fi
-          TITLE_DATE=$(date +%Y-%m-%d)
-          gh issue create \
-            --title "Security: yarn audit vulnerabilities detected (${TITLE_DATE})" \
-            --label "security-audit,priority:high" \
-            --body "The daily security audit has detected vulnerabilities. See [workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details."
 
   gradle-audit:
     name: Gradle Security Audit
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      issues: write
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4
@@ -63,15 +49,34 @@ jobs:
             --recursive
             --format=table
             ./android
-      - name: Create issue on failure
-        if: failure() && github.event_name != 'pull_request'
+
+  create-issue:
+    name: Create Issue on Failure
+    needs: [yarn-audit, gradle-audit]
+    if: always() && github.event_name != 'pull_request' && (needs.yarn-audit.result == 'failure' || needs.gradle-audit.result == 'failure')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - name: Create issue for audit failures
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           EXISTING=$(gh issue list --label "security-audit" --state open --json number --jq 'length')
           if [ "$EXISTING" -gt 0 ]; then exit 0; fi
+
+          FAILED_AUDITS=""
+          if [ "${{ needs.yarn-audit.result }}" = "failure" ]; then
+            FAILED_AUDITS="yarn"
+          fi
+          if [ "${{ needs.gradle-audit.result }}" = "failure" ]; then
+            FAILED_AUDITS="${FAILED_AUDITS:+$FAILED_AUDITS, }gradle"
+          fi
+
           TITLE_DATE=$(date +%Y-%m-%d)
           gh issue create \
-            --title "Security: Gradle dependency vulnerabilities detected (${TITLE_DATE})" \
+            --title "Security: dependency vulnerabilities detected (${TITLE_DATE})" \
             --label "security-audit,priority:high" \
-            --body "The daily security audit has detected vulnerabilities. See [workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details."
+            --body "The daily security audit has detected vulnerabilities in: ${FAILED_AUDITS}. See [workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details."
