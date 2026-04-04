@@ -13,6 +13,9 @@
  Enhanced Document Verification and Biometric KYC. When enabled, the back camera is always used without showing a
  toggle switch to the user.
 
+### Fixed
+* Fixed the invalidator bug when `allowNewEnroll` is set to true
+
 ## 11.1.7 - January 23, 2026
 
 ### Changed
