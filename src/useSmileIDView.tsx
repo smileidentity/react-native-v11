@@ -26,7 +26,7 @@ export const useSmileIDView = (viewName: string, props: SmileIDProps) => {
         // Use the ref to access the latest callback
         setViewProps((prev) => ({
           ...prev,
-          userId: 'invalidator',
+          _invalidationKey: Date.now(),
         }));
         if (onResultRef.current) {
           const nativeEvent = {
