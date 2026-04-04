@@ -20,6 +20,7 @@ struct SmileIDDocumentVerificationView: View {
                     autoCapture: product.autoCapture,
                     captureBothSides: product.captureBothSides,
                     allowAgentMode: product.allowAgentMode,
+                    forceAgentMode: product.forceAgentMode,
                     allowGalleryUpload: product.allowGalleryUpload,
                     showInstructions: product.showInstructions,
                     showAttribution: product.showAttribution,

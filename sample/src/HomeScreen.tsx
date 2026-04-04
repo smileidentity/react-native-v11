@@ -38,13 +38,14 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
   const defaultProductRef = useRef({
     userId: '',
     jobId: '',
-    allowAgentMode: true,
+    allowAgentMode: false,
+    forceAgentMode: false,
     showInstructions: true,
     showAttribution: true,
     showConfirmation: true,
     isDocumentFrontSide: true,
     allowGalleryUpload: true,
-    useStrictMode: true, // set to false for biometric KYC,doc V and enhanced doc V to use old SmartSelfie™ capture
+    useStrictMode: false, // set to false for biometric KYC,doc V and enhanced doc V to use old SmartSelfie™ capture
   });
 
   const defaultConsentInfo = useRef<ConsentInformation>(
@@ -109,6 +110,7 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
       documentType: 'PASSPORT',
       captureBothSides: true,
       allowGalleryUpload: false,
+      forceAgentMode: false,
     });
 
   const [biometricKYC, setBiometricKYC] = useState<BiometricKYCRequest>({
