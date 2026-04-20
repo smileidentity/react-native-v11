@@ -70,7 +70,9 @@ class SmileIDSmartSelfieCaptureView(context: ReactApplicationContext) : SmileIDS
                   )
                 } else {
                   RenderSmartSelfieCaptureContent(
-                    smileSensitivity = smileSensitivity ?: SmileSensitivity.NORMAL
+                    smileSensitivity = smileSensitivity ?: SmileSensitivity.NORMAL,
+                    allowAgentMode = allowAgentMode ?: false,
+                    forceAgentMode = forceAgentMode ?: false,
                   )
                 }
               })
@@ -84,7 +86,9 @@ class SmileIDSmartSelfieCaptureView(context: ReactApplicationContext) : SmileIDS
 
   @Composable
   private fun RenderSmartSelfieCaptureContent(
-    smileSensitivity: SmileSensitivity
+    smileSensitivity: SmileSensitivity,
+    allowAgentMode: Boolean,
+    forceAgentMode: Boolean,
   ) {
     val userId = randomUserId()
     val jobId = randomJobId()
@@ -96,8 +100,8 @@ class SmileIDSmartSelfieCaptureView(context: ReactApplicationContext) : SmileIDS
           jobId = jobId,
           allowNewEnroll = false,
           skipApiSubmission = true,
-          allowAgentMode = false,
-          forceAgentMode = false,
+          allowAgentMode = allowAgentMode,
+          forceAgentMode = forceAgentMode,
           metadata = mutableListOf(),
           smileSensitivity = smileSensitivity
         )
@@ -124,8 +128,8 @@ class SmileIDSmartSelfieCaptureView(context: ReactApplicationContext) : SmileIDS
       else -> RenderSelfieCaptureScreen(
         userId = userId,
         jobId = jobId,
-        allowAgentMode = allowAgentMode ?: false,
-        forceAgentMode = forceAgentMode ?: false,
+        allowAgentMode = allowAgentMode,
+        forceAgentMode = forceAgentMode,
         viewModel = viewModel,
       )
     }
