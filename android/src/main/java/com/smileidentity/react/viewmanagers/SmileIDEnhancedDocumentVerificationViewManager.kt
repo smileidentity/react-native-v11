@@ -46,6 +46,7 @@ class SmileIDEnhancedDocumentVerificationViewManager(
       view.autoCaptureTimeout = it.getIntOrDefault("autoCaptureTimeout", null)
       view.autoCapture = it.getStringOrDefault("autoCapture", null)?.toAutoCapture()
       view.allowAgentMode = it.getBoolOrDefault("allowAgentMode", false)
+      view.forceAgentMode = it.getBoolOrDefault("forceAgentMode", false)
       view.showAttribution = it.getBoolOrDefault("showAttribution", true)
       view.captureBothSides = it.getBoolOrDefault("captureBothSides", false)
       view.showInstructions = it.getBoolOrDefault("showInstructions", true)
@@ -54,6 +55,7 @@ class SmileIDEnhancedDocumentVerificationViewManager(
       view.idAspectRatio = it.getFloatOrDefault("idAspectRatio")
       view.allowNewEnroll = it.getBoolOrDefault("allowNewEnroll", false)
       view.useStrictMode = it.getBoolOrDefault("useStrictMode", false)
+      view.skipApiSubmission = it.getBoolOrDefault("skipApiSubmission", false)
     }
   }
 

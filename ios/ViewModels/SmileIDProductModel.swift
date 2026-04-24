@@ -15,6 +15,7 @@ class SmileIDProductModel: ObservableObject {
   @Published var productName: String?
   @Published var partnerPrivacyPolicy: String?
   @Published var allowAgentMode: Bool = false
+  @Published var forceAgentMode: Bool = false
   @Published var allowNewEnroll: Bool = false
   @Published var front: Bool = true
   @Published var showConfirmation: Bool = true
@@ -35,4 +36,5 @@ class SmileIDProductModel: ObservableObject {
   @Published var bypassSelfieCaptureWithFilePath: URL?
   @Published var onResult: RCTBubblingEventBlock?
   @Published var smileSensitivity: SmileSensitivity = .normal
+  @Published var paramsReady: Bool = false
 }

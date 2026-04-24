@@ -29,6 +29,7 @@ abstract class SmileIDView(private val currentContext: Context) : LinearLayout(c
   var jobId: String? = null
   private var jobType: JobType? = null
   var allowAgentMode: Boolean? = false
+  var forceAgentMode: Boolean? = false
   var smileViewListener: SmileViewListener? = null
   var allowNewEnroll: Boolean? = false
   var showInstructions: Boolean = true
@@ -36,12 +37,10 @@ abstract class SmileIDView(private val currentContext: Context) : LinearLayout(c
   var showAttribution: Boolean = true
   var extraPartnerParams: ImmutableMap<String, String> = persistentMapOf()
 
-  private var productThrowable: Throwable? = null
-
   init {
     val layoutParams = ViewGroup.LayoutParams(
-      ViewGroup.LayoutParams.WRAP_CONTENT,
-      ViewGroup.LayoutParams.WRAP_CONTENT
+      LayoutParams.WRAP_CONTENT,
+      LayoutParams.WRAP_CONTENT
     )
     setLayoutParams(layoutParams)
     orientation = VERTICAL
@@ -59,8 +58,8 @@ abstract class SmileIDView(private val currentContext: Context) : LinearLayout(c
       it.runOnUiThread {
         composeView = ComposeView(it)
         composeView.layoutParams = ViewGroup.LayoutParams(
-          ViewGroup.LayoutParams.MATCH_PARENT,
-          ViewGroup.LayoutParams.MATCH_PARENT
+          LayoutParams.MATCH_PARENT,
+          LayoutParams.MATCH_PARENT
         )
         addView(composeView)
       }

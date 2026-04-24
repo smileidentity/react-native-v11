@@ -46,6 +46,7 @@ class SmileIDDocumentVerificationViewManager: SmileIDBaseViewManager {
                 self.product.autoCapture = autoCapture?.toAutoCapture() ?? .autoCapture
                 self.product.allowNewEnroll = params["allowNewEnroll"] as? Bool ?? false
                 self.product.allowAgentMode = params["allowAgentMode"] as? Bool ?? false
+                self.product.forceAgentMode = params["forceAgentMode"] as? Bool ?? false
                 self.product.showAttribution = params["showAttribution"] as? Bool ?? true
                 self.product.showInstructions = params["showInstructions"] as? Bool ?? true
                 self.product.documentType = params["documentType"] as? String

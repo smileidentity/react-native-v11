@@ -52,6 +52,13 @@ type SmartSelfieRequest = SmileIDViewProps & {
    * the front camera will be used.
    */
   allowAgentMode: boolean;
+
+  /**
+   * Whether to force Agent Mode. If forced, the back camera will always be
+   * used without showing a toggle switch to the user. Takes precedence over [allowAgentMode].
+   */
+
+  forceAgentMode: boolean;
   /**
    * Whether to deactivate capture screen's instructions before selfie of document capture
    */
@@ -164,7 +171,10 @@ export type EnhancedDocumentVerificationRequest =
     consentInformation?: ConsentInformation;
   };
 
-export type ConsentRequest = Omit<SmartSelfieRequest, 'allowAgentMode'> & {
+export type ConsentRequest = Omit<
+  SmartSelfieRequest,
+  'allowAgentMode' | 'forceAgentMode'
+> & {
   /**
    * String value of the resource in the app's drawable folder to use as the partner icon.
    */

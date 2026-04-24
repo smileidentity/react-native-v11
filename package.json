@@ -1,6 +1,6 @@
 {
   "name": "@smile_identity/react-native",
-  "version": "11.1.7",
+  "version": "11.1.8",
   "description": "Official wrapper for the Smile ID >v10 android and iOS SDKs",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -71,7 +71,8 @@
     "typescript": "^5.2.2"
   },
   "resolutions": {
-    "@types/react": "^18.2.44"
+    "@types/react": "^18.2.44",
+    "fast-xml-parser": "^5.7.0"
   },
   "peerDependencies": {
     "react": "*",

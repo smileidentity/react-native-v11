@@ -14,10 +14,12 @@ struct SmileIDBiometricKYCView: View {
                     jobId: product.jobId ?? generateJobId(),
                     allowNewEnroll: product.allowNewEnroll,
                     allowAgentMode: product.allowAgentMode,
+                    forceAgentMode: product.forceAgentMode,
                     showAttribution: product.showAttribution,
                     showInstructions: product.showInstructions,
                     smileSensitivity: product.smileSensitivity,
                     useStrictMode: product.useStrictMode,
+                    skipApiSubmission: product.skipApiSubmission,
                     extraPartnerParams: product.extraPartnerParams as [String: String],
                     consentInformation: product.consentInformation,
                     delegate: self

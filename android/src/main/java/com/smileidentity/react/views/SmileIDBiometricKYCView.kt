@@ -36,6 +36,7 @@ class SmileIDBiometricKYCView(context: ReactApplicationContext) : SmileIDView(co
             userId = userId ?: rememberSaveable { randomUserId() },
             jobId = jobId ?: rememberSaveable { randomJobId() },
             allowAgentMode = allowAgentMode ?: false,
+            forceAgentMode = forceAgentMode ?: false,
             allowNewEnroll = allowNewEnroll ?: false,
             showAttribution = showAttribution,
             showInstructions = showInstructions,
@@ -43,6 +44,7 @@ class SmileIDBiometricKYCView(context: ReactApplicationContext) : SmileIDView(co
             extraPartnerParams = extraPartnerParams,
             consentInformation = consentInformation,
             useStrictMode = useStrictMode ?: false,
+            skipApiSubmission = skipApiSubmission
           ) { res ->
             when (res) {
               is SmileIDResult.Success -> {

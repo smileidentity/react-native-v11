@@ -28,6 +28,7 @@ class SmileIDSmartSelfieCaptureViewManager(
       view.userId = it.getStringOrDefault("userId")
       view.jobId = it.getStringOrDefault("jobId")
       view.allowAgentMode = it.getBoolOrDefault("allowAgentMode", false)
+      view.forceAgentMode = it.getBoolOrDefault("forceAgentMode", false)
       view.showAttribution = it.getBoolOrDefault("showAttribution", true)
       view.showInstructions = it.getBoolOrDefault("showInstructions", true)
       view.useStrictMode = it.getBoolOrDefault("useStrictMode", false)

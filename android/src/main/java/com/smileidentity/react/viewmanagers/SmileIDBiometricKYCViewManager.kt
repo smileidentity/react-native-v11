@@ -37,10 +37,12 @@ class SmileIDBiometricKYCViewManager(
       view.jobId = it.getStringOrDefault("jobId")
       view.idInfo = idInfo
       view.allowAgentMode = it.getBoolOrDefault("allowAgentMode", false)
+      view.forceAgentMode = it.getBoolOrDefault("forceAgentMode", false)
       view.showAttribution = it.getBoolOrDefault("showAttribution", true)
       view.showInstructions = it.getBoolOrDefault("showInstructions", true)
       view.allowNewEnroll = it.getBoolOrDefault("allowNewEnroll", false)
       view.useStrictMode = it.getBoolOrDefault("useStrictMode", false)
+      view.skipApiSubmission = it.getBoolOrDefault("skipApiSubmission", false)
       view.smileSensitivity =
         it.getStringOrDefault("smileSensitivity", null)?.toSmileSensitivity()
     }

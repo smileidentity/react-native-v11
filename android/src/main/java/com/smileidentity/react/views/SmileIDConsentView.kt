@@ -58,6 +58,7 @@ class SmileIDConsentView(context: ReactApplicationContext) : SmileIDView(context
             onConsentGranted = {
               emitSuccess("accepted")
             },
+            showAttribution = showAttribution
           )
         }
       }

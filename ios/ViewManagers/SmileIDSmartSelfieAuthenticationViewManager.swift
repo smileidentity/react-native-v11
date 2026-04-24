@@ -22,6 +22,7 @@ class SmileIDSmartSelfieAuthenticationViewManager: SmileIDBaseViewManager {
                 self.product.jobId = params["jobId"] as? String
                 self.product.allowNewEnroll = params["allowNewEnroll"] as? Bool ?? false
                 self.product.allowAgentMode = params["allowAgentMode"] as? Bool ?? false
+                self.product.forceAgentMode = params["forceAgentMode"] as? Bool ?? false
                 self.product.showAttribution = params["showAttribution"] as? Bool ?? true
                 self.product.showInstructions = params["showInstructions"] as? Bool ?? true
                 self.product.smileSensitivity = smileSensitivity?.toSmileSensitivity() ?? .normal
