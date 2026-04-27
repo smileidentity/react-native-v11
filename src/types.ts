@@ -51,14 +51,14 @@ type SmartSelfieRequest = SmileIDViewProps & {
    * displayed allowing toggling between the back camera and front camera. If not allowed, only
    * the front camera will be used.
    */
-  allowAgentMode: boolean;
+  allowAgentMode?: boolean;
 
   /**
    * Whether to force Agent Mode. If forced, the back camera will always be
    * used without showing a toggle switch to the user. Takes precedence over [allowAgentMode].
    */
 
-  forceAgentMode: boolean;
+  forceAgentMode?: boolean;
   /**
    * Whether to deactivate capture screen's instructions before selfie of document capture
    */

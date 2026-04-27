@@ -38,14 +38,12 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
   const defaultProductRef = useRef({
     userId: '',
     jobId: '',
-    allowAgentMode: false,
-    forceAgentMode: false,
     showInstructions: true,
     showAttribution: true,
     showConfirmation: true,
     isDocumentFrontSide: true,
     allowGalleryUpload: true,
-    useStrictMode: false, // set to false for biometric KYC,doc V and enhanced doc V to use old SmartSelfie™ capture
+    useStrictMode: false, // set to false for biometric KYC, doc V and enhanced doc V to use old SmartSelfie™ capture
   });
 
   const defaultConsentInfo = useRef<ConsentInformation>(
@@ -394,7 +392,7 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
             setJobId(generateUuid('job_'));
             setCurrentProduct(null);
             console.log('Got response from SmileIDComponent', event);
-            // If you want to run another job after this one
+            // If you want to run another job after this one,
             // update the current product's job/user IDs
             // setCurrentProduct((prev) => ({
             //   ...prev,
