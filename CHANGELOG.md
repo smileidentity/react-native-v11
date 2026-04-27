@@ -1,5 +1,10 @@
 # Release Notes
 
+## Unreleased
+
+### Changed
+* Made `forceAgentMode` and `allowAgentMode` optional.
+
 ## 11.1.8 - April 24, 2026
 
 ### Changed
