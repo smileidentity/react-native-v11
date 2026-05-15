@@ -112,7 +112,7 @@ jobs:
       - name: Publish package
         run: |
           yarn prepare
-          npm publish --access public --provenance
+          npm publish
 
   post-release:
     name: Post-release actions
