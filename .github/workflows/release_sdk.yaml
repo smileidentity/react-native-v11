@@ -56,7 +56,7 @@ jobs:
             echo "Tag ${new_tag} already exists locally" >&2
             exit 1
           fi
-          if git ls-remote --exit-code --tags origin "${new_tag}" >/dev/null 2>&1; then
+          if git ls-remote --exit-code --tags origin "refs/tags/${new_tag}" >/dev/null 2>&1; then
             echo "Tag ${new_tag} already exists on origin" >&2
             exit 1
           fi
@@ -71,9 +71,8 @@ jobs:
 
       - name: Publish package
         run: |
-          npm config set //registry.npmjs.org/:_authToken ${NODE_AUTH_TOKEN}
-          npm ci
-          npm run build
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+          yarn prepare
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
