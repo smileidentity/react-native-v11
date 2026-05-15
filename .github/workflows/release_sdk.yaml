@@ -20,6 +20,7 @@ jobs:
     needs: release
     permissions:
       contents: write
+      id-token: write
     outputs:
       new_tag: ${{ steps.read_version.outputs.new_tag }}
     steps:
@@ -105,14 +106,13 @@ jobs:
             gh release create "$new_tag" --title "Release $new_tag" --notes "Release notes for $new_tag"
           fi
 
+      - name: Upgrade npm for OIDC trusted publishing
+        run: npm install -g npm@latest
+
       - name: Publish package
         run: |
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
-          echo "Authenticated as: $(npm whoami --registry=https://registry.npmjs.org/)"
           yarn prepare
-          npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+          npm publish --access public --provenance
 
   post-release:
     name: Post-release actions
