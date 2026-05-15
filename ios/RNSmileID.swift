@@ -11,15 +11,8 @@ class RNSmileID: NSObject {
     resolve: @escaping RCTPromiseResolveBlock,
     reject _: @escaping RCTPromiseRejectBlock
   ) {
-    // Set wrapper info for React Native SDK using compile-time constant
-#if SMILE_ID_VERSION
-    let sdkVersion = SMILE_ID_VERSION
-#else
-    let sdkVersion = "unknown" // Fallback version
-#endif
-    
-    SmileID.setWrapperInfo(name: .reactNative, version: sdkVersion)
-    
+    SmileID.setWrapperInfo(name: .reactNative, version: "11.1.9")
+
     // Handle different initialization scenarios based on provided parameters
     if let apiKey = apiKey, let config = config {
       // Initialize with API key and config
@@ -38,22 +31,22 @@ class RNSmileID: NSObject {
       // Basic initialization with just sandbox flag
       SmileID.initialize(useSandbox: useSandBox)
     }
-    
+
     resolve(nil)
   }
-  
+
   @objc(setCallbackUrl:withResolver:withRejecter:)
   func setCallbackUrl(callbackUrl: String, resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
     SmileID.setCallbackUrl(url: URL(string: callbackUrl))
     resolve(nil)
   }
-  
+
   @objc(setAllowOfflineMode:withResolver:withRejecter:)
   func setAllowOfflineMode(allowOfflineMode: Bool, resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
     SmileID.setAllowOfflineMode(allowOfflineMode: allowOfflineMode)
     resolve(nil)
   }
-  
+
   @objc(submitJob:withResolver:withRejecter:)
   func submitJob(jobId: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     do {
@@ -63,7 +56,7 @@ class RNSmileID: NSObject {
       reject("Error", error.localizedDescription, error)
     }
   }
-  
+
   @objc(getSubmittedJobs:withRejecter:)
   func getSubmittedJobs(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     do {
@@ -73,7 +66,7 @@ class RNSmileID: NSObject {
       reject("Error", error.localizedDescription, error)
     }
   }
-  
+
   @objc(getUnsubmittedJobs:withRejecter:)
   func getUnsubmittedJobs(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     do {
@@ -83,7 +76,7 @@ class RNSmileID: NSObject {
       reject("Error", error.localizedDescription, error)
     }
   }
-  
+
   @objc(cleanup:withResolver:withRejecter:)
   func cleanup(jobId: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     do {
@@ -93,14 +86,14 @@ class RNSmileID: NSObject {
       reject("Error", error.localizedDescription, error)
     }
   }
-  
+
   @objc(authenticate:withResolver:withRejecter:)
   func authenticate(request: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     guard let authenticationRequest = request.toAuthenticationRequest() else {
       reject("Error", "Invalid request data", nil)
       return
     }
-    
+
     Task {
       do {
         let response = try await SmileID.api.authenticate(request: authenticationRequest)
@@ -110,14 +103,14 @@ class RNSmileID: NSObject {
       }
     }
   }
-  
+
   @objc(prepUpload:withResolver:withRejecter:)
   func prepUpload(request: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     guard let prepUploadRequest = request.toPrepUploadRequest() else {
       reject("Error", "Invalid prep upload request", nil)
       return
     }
-    
+
     Task {
       do {
         let response = try await SmileID.api.prepUpload(request: prepUploadRequest)
@@ -127,14 +120,14 @@ class RNSmileID: NSObject {
       }
     }
   }
-  
+
   @objc(upload:request:withResolver:withRejecter:)
   func upload(url: String, request: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     guard let uploadRequest = request.toUploadRequest() else {
       reject("Error", "Invalid upload request", nil)
       return
     }
-    
+
     guard let zipData = try? LocalStorage.toZip(uploadRequest: uploadRequest) else {
       reject("Error", "Unable to zip file", nil)
       return
@@ -148,7 +141,7 @@ class RNSmileID: NSObject {
       }
     }
   }
-  
+
   @objc(doEnhancedKyc:withResolver:withRejecter:)
   func doEnhancedKyc(request: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     guard let partnerParamsDict = request["partnerParams"] as? NSDictionary else {
@@ -179,7 +172,7 @@ class RNSmileID: NSObject {
       reject("doEnhancedKyc", "signature is required", nil)
       return
     }
-    
+
     let consentInfo: ConsentInformation
     if let consentInformation = request["consentInformation"] as? NSDictionary {
       consentInfo = consentInformation.toConsentInfo()
@@ -190,7 +183,7 @@ class RNSmileID: NSObject {
                                                                        documentInformation: false)
       )
     }
-    
+
     let request = EnhancedKycRequest(
       country: country,
       idType: idType,
@@ -208,7 +201,7 @@ class RNSmileID: NSObject {
       timestamp: timestamp,
       signature: signature
     )
-    
+
     Task {
       do {
         let response = try await SmileID.api.doEnhancedKyc(request: request)
@@ -223,7 +216,7 @@ class RNSmileID: NSObject {
       }
     }
   }
-  
+
   @objc(doEnhancedKycAsync:withResolver:withRejecter:)
   func doEnhancedKycAsync(request: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     guard let partnerParamsDict = request["partnerParams"] as? NSDictionary else {
@@ -254,12 +247,12 @@ class RNSmileID: NSObject {
       reject("doEnhancedKyc", "signature is required", nil)
       return
     }
-    
+
     guard let consentInformation = request["consentInformation"] as? NSDictionary else {
       reject("doEnhancedKyc", "consentInformation is required", nil)
       return
     }
-    
+
     let request = EnhancedKycRequest(
       country: country,
       idType: idType,
@@ -277,7 +270,7 @@ class RNSmileID: NSObject {
       timestamp: timestamp,
       signature: signature
     )
-    
+
     Task {
       do {
         let response = try await SmileID.api.doEnhancedKycAsync(request: request)
@@ -292,34 +285,34 @@ class RNSmileID: NSObject {
       }
     }
   }
-  
+
   @objc(getSmartSelfieJobStatus:withResolver:withRejecter:)
   func getSmartSelfieJobStatus(request: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     getJobStatus(request: request, resolve: resolve, reject: reject)
   }
-  
+
   @objc(getDocumentVerificationJobStatus:withResolver:withRejecter:)
   func getDocumentVerificationJobStatus(request: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     getJobStatus(request: request, resolve: resolve, reject: reject)
   }
-  
+
   @objc(getBiometricKycJobStatus:withResolver:withRejecter:)
   func getBiometricKycJobStatus(request: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     getJobStatus(request: request, resolve: resolve, reject: reject)
   }
-  
+
   @objc(getEnhancedDocumentVerificationJobStatus:withResolver:withRejecter:)
   func getEnhancedDocumentVerificationJobStatus(request: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     getJobStatus(request: request, resolve: resolve, reject: reject)
   }
-  
+
   @objc(getProductsConfig:withResolver:withRejecter:)
   func getProductsConfig(request: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     guard let productsConfigRequest = request.toProductsConfigRequest() else {
       reject("Error", "Invalid products config request", nil)
       return
     }
-    
+
     Task {
       do {
         let response = try await SmileID.api.getProductsConfig(request: productsConfigRequest)
@@ -329,14 +322,14 @@ class RNSmileID: NSObject {
       }
     }
   }
-  
+
   @objc(getValidDocuments:withResolver:withRejecter:)
   func getValidDocuments(request: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     guard let validDocumentsRequest = request.toProductsConfigRequest() else {
       reject("Error", "Invalid valid documents request", nil)
       return
     }
-    
+
     Task {
       do {
         let response = try await SmileID.api.getValidDocuments(request: validDocumentsRequest)
@@ -346,7 +339,7 @@ class RNSmileID: NSObject {
       }
     }
   }
-  
+
   @objc(getServicesWithResolver:withRejecter:)
   func getServices(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     Task {
@@ -358,14 +351,14 @@ class RNSmileID: NSObject {
       }
     }
   }
-  
+
   @objc(getJobStatus:withResolver:withRejecter:)
   func getJobStatus(request: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     guard let jobStatusRequest = request.toJobStatusRequest() else {
       reject("Error", "Invalid job status request", nil)
       return
     }
-    
+
     Task {
       do {
         let response = try await SmileID.api.getJobStatus(request: jobStatusRequest)
@@ -375,24 +368,24 @@ class RNSmileID: NSObject {
       }
     }
   }
-  
+
   @objc(pollSmartSelfieJobStatus:withResolver:withRejecter:)
   func pollSmartSelfieJobStatus(request: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     guard let jobStatusRequest = request.toJobStatusRequest() else {
       reject("Error", "Invalid job status request", nil)
       return
     }
-    
+
     guard let interval = request["interval"] as? Int64 else {
       reject("Error", "interval is required", nil)
       return
     }
-    
+
     guard let numAttempts = request["numAttempts"] as? Int64 else {
       reject("Error", "numAttempts is required", nil)
       return
     }
-    
+
     pollJobStatus(
       apiCall: SmileID.api.pollSmartSelfieJobStatus,
       request: jobStatusRequest,
@@ -402,24 +395,24 @@ class RNSmileID: NSObject {
       reject: reject
     )
   }
-  
+
   @objc(pollDocumentVerificationJobStatus:withResolver:withRejecter:)
   func pollDocumentVerificationJobStatus(request: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     guard let jobStatusRequest = request.toJobStatusRequest() else {
       reject("Error", "Invalid job status request", nil)
       return
     }
-    
+
     guard let interval = request["interval"] as? Int64 else {
       reject("Error", "interval is required", nil)
       return
     }
-    
+
     guard let numAttempts = request["numAttempts"] as? Int64 else {
       reject("Error", "numAttempts is required", nil)
       return
     }
-    
+
     pollJobStatus(
       apiCall: SmileID.api.pollDocumentVerificationJobStatus,
       request: jobStatusRequest,
@@ -429,24 +422,24 @@ class RNSmileID: NSObject {
       reject: reject
     )
   }
-  
+
   @objc(pollBiometricKycJobStatus:withResolver:withRejecter:)
   func pollBiometricKycJobStatus(request: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     guard let jobStatusRequest = request.toJobStatusRequest() else {
       reject("Error", "Invalid job status request", nil)
       return
     }
-    
+
     guard let interval = request["interval"] as? Int64 else {
       reject("Error", "interval is required", nil)
       return
     }
-    
+
     guard let numAttempts = request["numAttempts"] as? Int64 else {
       reject("Error", "numAttempts is required", nil)
       return
     }
-    
+
     pollJobStatus(
       apiCall: SmileID.api.pollBiometricKycJobStatus,
       request: jobStatusRequest,
@@ -456,24 +449,24 @@ class RNSmileID: NSObject {
       reject: reject
     )
   }
-  
+
   @objc(pollEnhancedDocumentVerificationJobStatus:withResolver:withRejecter:)
   func pollEnhancedDocumentVerificationJobStatus(request: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     guard let jobStatusRequest = request.toJobStatusRequest() else {
       reject("Error", "Invalid job status request", nil)
       return
     }
-    
+
     guard let interval = request["interval"] as? Int64 else {
       reject("Error", "interval is required", nil)
       return
     }
-    
+
     guard let numAttempts = request["numAttempts"] as? Int64 else {
       reject("Error", "numAttempts is required", nil)
       return
     }
-    
+
     pollJobStatus(
       apiCall: SmileID.api.pollEnhancedDocumentVerificationJobStatus,
       request: jobStatusRequest,
@@ -483,7 +476,7 @@ class RNSmileID: NSObject {
       reject: reject
     )
   }
-  
+
   func pollJobStatus<RequestType, T: JobResult>(
     apiCall: @escaping (RequestType, TimeInterval, Int) async throws -> AsyncThrowingStream<JobStatusResponse<T>, Error>,
     request: RequestType,
@@ -497,12 +490,12 @@ class RNSmileID: NSObject {
       reject("InvalidNumAttempts", "Invalid numAttempts value", NSError(domain: "Invalid numAttempts value", code: -1, userInfo: nil))
       return
     }
-    
+
     Task {
       do {
         let pollStream = try await apiCall(request, timeInterval, numAttemptsInt)
         var result: JobStatusResponse<T>?
-        
+
         for try await res in pollStream {
           result = res
         }
@@ -516,12 +509,12 @@ class RNSmileID: NSObject {
       }
     }
   }
-  
+
   func convertToTimeInterval(milliSeconds: Int64) -> TimeInterval {
     let seconds = milliSeconds / 1000
     return TimeInterval(seconds)
   }
-  
+
   private func resolveResponse<T: Encodable>(_ response: T, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     let encoder = JSONEncoder()
     guard let jsonData = try? encoder.encode(response) else {
@@ -530,7 +523,7 @@ class RNSmileID: NSObject {
     }
     resolve(String(data: jsonData, encoding: .utf8) ?? "")
   }
-  
+
   @objc(applyLocalization:withRejecter:)
   func applyLocalization(
     resolve: @escaping RCTPromiseResolveBlock,

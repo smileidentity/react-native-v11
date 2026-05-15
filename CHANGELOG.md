@@ -1,9 +1,11 @@
 # Release Notes
 
-## Unreleased
+## 11.1.9 - May 15, 2026
 
 ### Changed
 * Made `forceAgentMode` and `allowAgentMode` optional.
+* Bump Android SDK to [v11.1.11](https://github.com/smileidentity/android/releases/tag/v11.1.11)
+* Bump iOS SDK to [v11.1.11](https://github.com/smileidentity/ios/releases/tag/v11.1.11)
 
 ## 11.1.8 - April 24, 2026
 
