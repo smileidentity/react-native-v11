@@ -2,85 +2,121 @@ name: 'Release SDK'
 
 on:
   workflow_dispatch:
-    inputs:
-      release_version:
-        type: choice
-        description: 'Select the version type to release'
-        required: true
-        default: patch
-        options:
-          - patch
-          - minor
-          - major
-          - beta
-          - alpha
+
+permissions:
+  contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   release:
     uses: ./.github/workflows/ci.yml
 
-  bump-version:
+  publish:
+    name: Tag, release, and publish
     runs-on: ubuntu-latest
     needs: release
+    permissions:
+      contents: write
+    outputs:
+      new_tag: ${{ steps.read_version.outputs.new_tag }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
 
-      - name: Bump version
-        id: bump_version
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Configure git
         run: |
-          # Define function to parse and bump version number
-          bump_version() {
-            if [[ "$1" == "beta" || "$1" == "alpha" ]]; then
-              main_version="${current_version%-*}"
-              prerelease_version="${current_version#*-}"
-              prerelease_identifier="${prerelease_version%[0-9]*}"
-              numeric_part="${prerelease_version#$prerelease_identifier}"
-              numeric_part=$(printf "%01d" $((10#$numeric_part + 1)))
-              echo "${main_version}-${prerelease_identifier}${numeric_part}"
-            else
-              echo "$1"
-            fi
-          }
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
 
-          # Fetch current version and determine new version
-          current_version=$(node -p "require('./package.json').version")
-          new_version=$(bump_version "${{ github.event.inputs.release_version }}")
-
-          # Bump package version and output new version
-          npm version "$new_version" --no-git-tag-version
-          echo "new_version=$new_version" >> $GITHUB_ENV
-          echo "new_branch=release/$new_version" >> $GITHUB_ENV
-
-          echo "Version bumped to $new_version"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create Release Branch
+      - name: Read package version
+        id: read_version
         run: |
-          new_branch=$new_version
-          git checkout -b $new_branch
-          git push origin $new_branch
-
-      - name: Create Tag and Release
-        run: |
+          new_version=$(node -p "require('./package.json').version")
+          pkg_name=$(node -p "require('./package.json').name")
+          if [ -z "$new_version" ] || [ -z "$pkg_name" ]; then
+            echo "Could not read name/version from package.json" >&2
+            exit 1
+          fi
+          if ! printf '%s' "$new_version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$'; then
+            echo "package.json version '$new_version' is not a valid semver" >&2
+            exit 1
+          fi
           new_tag="v$new_version"
-          git tag $new_tag
-          git push origin $new_tag
-          gh release create $new_tag --title "Release $new_tag" --notes "Release notes for $new_tag"
+          echo "new_version=$new_version" >> "$GITHUB_ENV"
+          echo "pkg_name=$pkg_name" >> "$GITHUB_ENV"
+          echo "new_tag=$new_tag" >> "$GITHUB_ENV"
+          echo "new_tag=$new_tag" >> "$GITHUB_OUTPUT"
+          echo "Releasing $pkg_name $new_tag"
 
-      - name: Publish Package
+      - name: Verify npm version is not already published
         run: |
-          npm config set //registry.npmjs.org/:_authToken ${NODE_AUTH_TOKEN}
-          npm ci
-          npm run build
+          published=$(npm view "${pkg_name}@${new_version}" version 2>/dev/null || true)
+          if [ -n "$published" ]; then
+            echo "npm version ${pkg_name}@${new_version} is already published" >&2
+            exit 1
+          fi
+
+      - name: Create or reuse tag
+        run: |
+          head_sha=$(git rev-parse HEAD)
+
+          local_target=""
+          if git rev-parse -q --verify "refs/tags/${new_tag}" >/dev/null; then
+            local_target=$(git rev-parse "refs/tags/${new_tag}^{commit}")
+            if [ "$local_target" = "$head_sha" ]; then
+              echo "Local tag ${new_tag} already points to HEAD (${head_sha}); reusing"
+            else
+              echo "Local tag ${new_tag} points to ${local_target}, not HEAD (${head_sha})" >&2
+              exit 1
+            fi
+          else
+            git tag "$new_tag"
+          fi
+
+          remote_sha=$(git ls-remote --tags origin "refs/tags/${new_tag}" | awk '{print $1}')
+          if [ -n "$remote_sha" ]; then
+            # ls-remote on an annotated tag returns the tag object sha; resolve to commit
+            remote_target=$(git rev-parse "refs/tags/${new_tag}^{commit}" 2>/dev/null || echo "$remote_sha")
+            if [ "$remote_target" = "$head_sha" ]; then
+              echo "Remote tag ${new_tag} already points to HEAD; skipping push"
+            else
+              echo "Remote tag ${new_tag} points to ${remote_target}, not HEAD (${head_sha})" >&2
+              exit 1
+            fi
+          else
+            git push origin "$new_tag"
+          fi
+
+      - name: Create or reuse GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh release view "$new_tag" >/dev/null 2>&1; then
+            echo "GitHub release ${new_tag} already exists; reusing"
+          else
+            gh release create "$new_tag" --title "Release $new_tag" --notes "Release notes for $new_tag"
+          fi
+
+      - name: Publish package
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+          yarn prepare
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
 
-      - name: Create Pull Request
-        run: |
-          gh pr create --title "Merge release $new_version into main" --body "This is an automated pull request to update the version." --base main --head $new_branch
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  post-release:
+    name: Post-release actions
+    needs: publish
+    uses: ./.github/workflows/post_release.yml
+    with:
+      tag_name: ${{ needs.publish.outputs.new_tag }}
+    secrets: inherit

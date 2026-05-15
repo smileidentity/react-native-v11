@@ -4,11 +4,38 @@ on:
   release:
     types:
       - created
+  workflow_call:
+    inputs:
+      tag_name:
+        description: 'Release tag to publish notes for (used when invoked from CI)'
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Release tag to publish notes for (e.g. v11.2.10)'
+        required: true
+        type: string
+
+permissions:
+  contents: read
 
 jobs:
   update-docs-release-notes:
     runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ inputs.tag_name || github.event.release.tag_name }}
     steps:
+      - name: Validate release tag
+        run: |
+          if [ -z "${RELEASE_TAG}" ]; then
+            echo "RELEASE_TAG is empty; cannot proceed" >&2
+            exit 1
+          fi
+          if ! printf '%s' "${RELEASE_TAG}" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z]+(\.[0-9A-Za-z]+)*)?$'; then
+            echo "RELEASE_TAG '${RELEASE_TAG}' is not a valid v-prefixed semver" >&2
+            exit 1
+          fi
       - name: Checkout react-native
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -20,15 +47,15 @@ jobs:
           path: docs
           token: ${{ secrets.GH_PAT }}
       - name: Copy CHANGELOG.md to Release Notes
-        run: cp react-native/CHANGELOG.md docs/integration-options/mobile/react-native-v10/release-notes.md
+        run: cp react-native/CHANGELOG.md docs/integration-options/mobile/react-native-v11/release-notes.md
       - name: Create docs PR
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           token: ${{ secrets.GH_PAT }}
           path: docs
-          commit-message: React Native ${{ github.event.release.tag_name }} Release Notes
-          title: React Native ${{ github.event.release.tag_name }} Release Notes
+          commit-message: React Native ${{ env.RELEASE_TAG }} Release Notes
+          title: React Native ${{ env.RELEASE_TAG }} Release Notes
           body: Automated PR to update the release notes
-          branch: react-native-release-notes-${{ github.event.release.tag_name }}
+          branch: react-native-release-notes-${{ env.RELEASE_TAG }}
           labels: "release-notes"
           team-reviewers: "smileidentity/mobile"
