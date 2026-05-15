@@ -40,7 +40,7 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/smileidentity/react-native",
+  "repository": "https://github.com/smileidentity/react-native-v11",
   "author": "Smile ID <japhet@smileidentity.com> (https://docs.usesmileid.com/)",
   "license": "MIT",
   "bugs": {
