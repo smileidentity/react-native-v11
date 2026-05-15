@@ -108,8 +108,9 @@ jobs:
       - name: Publish package
         run: |
           echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+          echo "Authenticated as: $(npm whoami --registry=https://registry.npmjs.org/)"
           yarn prepare
-          npm publish
+          npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
 
