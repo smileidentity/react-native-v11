@@ -1,5 +1,10 @@
 # Release Notes
 
+## 11.2.3 - September 17, 2026
+
+### Changed
+* Bump iOS SDK to [v11.2.3](https://github.com/smileidentity/ios/releases/tag/v11.2.3)
+
 ## 11.2.2 - September 10, 2026
 
 ### Changed
