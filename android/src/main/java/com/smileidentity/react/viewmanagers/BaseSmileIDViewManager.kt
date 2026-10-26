@@ -89,7 +89,7 @@ abstract class BaseSmileIDViewManager<T : SmileIDView>(
       MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
       MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
     )
-    view.layout(0, 0, width, height)
+    view.layout(view.left, view.top, view.left + width, view.top + height)
   }
 
   override fun createViewInstance(p0: ThemedReactContext): FrameLayout {
@@ -106,7 +106,16 @@ abstract class BaseSmileIDViewManager<T : SmileIDView>(
     args: ReadableArray?
   ) {
     super.receiveCommand(view, commandId, args)
-    when (commandId?.toInt()) {
+    handleCommand(view, commandId?.let { it.toIntOrNull() ?: getCommandsMap()[it] }, args)
+  }
+
+  @Deprecated("The New Architecture delivers numeric command ids through this overload")
+  override fun receiveCommand(view: FrameLayout, commandId: Int, args: ReadableArray?) {
+    handleCommand(view, commandId, args)
+  }
+
+  private fun handleCommand(view: FrameLayout, commandId: Int?, args: ReadableArray?) {
+    when (commandId) {
       COMMAND_CREATE -> {
         val reactNativeViewId = requireNotNull(args).getInt(0)
         createFragment(view, reactNativeViewId)
