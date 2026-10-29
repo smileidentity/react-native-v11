@@ -35,7 +35,6 @@ jobs:
       - name: Create Release Branch
         run: |
           git checkout -b "ios-$VERSION"
-          git push origin "ios-$VERSION"
       - name: Read build.gradle
         id: read-file
         run: |
