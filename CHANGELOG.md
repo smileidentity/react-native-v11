@@ -1,5 +1,11 @@
 # Release Notes
 
+## Unreleased
+
+### Fixed
+* Android views no longer render blank on the New Architecture (React Native 0.74 and later). The `create` and `setParams` commands now reach the native view, and the view keeps the position React Native gives it, so it no longer covers content above it.
+* On Android, a result no longer restarts the capture flow. After a successful result the view is cleared so the result dialog does not stay over the next screen; after an error the view keeps its content until it is unmounted.
+
 ## 11.2.3 - September 17, 2026
 
 ### Changed

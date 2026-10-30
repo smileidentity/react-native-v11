@@ -2,6 +2,8 @@ package com.smileidentity.react.views
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.view.Choreographer
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -36,6 +38,7 @@ abstract class SmileIDView(private val currentContext: Context) : LinearLayout(c
   var skipApiSubmission: Boolean = false
   var showAttribution: Boolean = true
   var extraPartnerParams: ImmutableMap<String, String> = persistentMapOf()
+  @Volatile private var released = false
 
   init {
     val layoutParams = ViewGroup.LayoutParams(
@@ -81,7 +84,22 @@ abstract class SmileIDView(private val currentContext: Context) : LinearLayout(c
   }
 
   open fun sendEvent(map: WritableMap) {
-    smileViewListener?.emitSuccess(map)
+    val listener = smileViewListener ?: return
+    listener.emitSuccess(map)
+    // Kept after an error so a partner that stays on the screen still has a view; release() disposes it.
+    if (map.hasKey("error")) return
+    // The SDK's result screen is a Compose Dialog in its own window; it stays on top of
+    // the next React Native screen until this composition is disposed.
+    Handler(Looper.getMainLooper()).post { if (!released) disposeContent() }
+  }
+
+  fun disposeContent() {
+    if (::composeView.isInitialized) composeView.disposeComposition()
+  }
+
+  fun release() {
+    released = true
+    disposeContent()
   }
 
   open fun emitFailure(error: Throwable?) {
@@ -93,6 +111,7 @@ abstract class SmileIDView(private val currentContext: Context) : LinearLayout(c
   private fun setupLayoutHack() {
     Choreographer.getInstance().postFrameCallback(object : Choreographer.FrameCallback {
       override fun doFrame(frameTimeNanos: Long) {
+        if (released) return
         manuallyLayoutChildren()
         viewTreeObserver.dispatchOnGlobalLayout()
         Choreographer.getInstance().postFrameCallback(this)
