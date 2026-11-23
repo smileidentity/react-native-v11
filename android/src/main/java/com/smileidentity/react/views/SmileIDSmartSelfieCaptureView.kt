@@ -187,7 +187,7 @@ class SmileIDSmartSelfieCaptureView(context: ReactApplicationContext) : SmileIDS
         scaleFactor = 1.25f,
       )
     } else {
-      // If confirmation is disabled, automatically confirm (once per selfie)
+      // If confirmation is disabled, automatically confirm
       LaunchedEffect(uiState.selfieToConfirm) {
         viewModel.submitJob()
       }
