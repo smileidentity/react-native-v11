@@ -1,5 +1,13 @@
 # Release Notes
 
+## Unreleased
+
+### Fixed
+* Fixed the Android SmartSelfie capture view occasionally sending its result more than once, which could restart the capture after it had finished.
+
+### Note
+* The iOS 12-image liveness fix and the Android liveness image count fix ship with the next native SDK releases. This release does not bump the native SDK versions (iOS SmileID 11.2.3, Android 11.2.2).
+
 ## 11.2.3 - September 17, 2026
 
 ### Changed
