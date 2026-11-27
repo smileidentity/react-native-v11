@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -187,16 +188,20 @@ class SmileIDSmartSelfieCaptureView(context: ReactApplicationContext) : SmileIDS
       )
     } else {
       // If confirmation is disabled, automatically confirm
-      viewModel.submitJob()
+      LaunchedEffect(uiState.selfieToConfirm) {
+        viewModel.submitJob()
+      }
     }
   }
 
   @Composable
   private fun HandleProcessingState(viewModel: SelfieViewModel) {
-    try {
-      viewModel.onFinished { res -> handleResultCallback(res) }
-    } catch (e: Exception) {
-      emitFailure(e)
+    LaunchedEffect(viewModel) {
+      try {
+        viewModel.onFinished { res -> handleResultCallback(res) }
+      } catch (e: Exception) {
+        emitFailure(e)
+      }
     }
   }
 }

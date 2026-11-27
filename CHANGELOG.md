@@ -1,5 +1,10 @@
 # Release Notes
 
+## Unreleased
+
+### Fixed
+* Fixed the Android SmartSelfie capture view occasionally sending its result more than once, which could restart the capture after it had finished.
+
 ## 11.2.3 - September 17, 2026
 
 ### Changed
