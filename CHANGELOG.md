@@ -1,9 +1,13 @@
 # Release Notes
 
-## Unreleased
+## 11.2.4 - November 27, 2026
 
 ### Fixed
 * Fixed the Android SmartSelfie capture view occasionally sending its result more than once, which could restart the capture after it had finished.
+
+### Changed
+* Bump Android SDK to [v11.2.3](https://github.com/smileidentity/android-v11/releases/tag/v11.2.3)
+* Bump iOS SDK to [v11.2.4](https://github.com/smileidentity/ios/releases/tag/v11.2.4)
 
 ## 11.2.3 - September 17, 2026
 
